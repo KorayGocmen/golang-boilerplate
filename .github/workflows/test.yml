@@ -1,0 +1,53 @@
+name: "test"
+
+on:
+  pull_request:
+    branches:
+      - master
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - ready_for_review
+  workflow_call:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    if: github.event.pull_request.draft == false
+    runs-on: ubuntu-22.04
+
+    strategy:
+      fail-fast: false
+      matrix:
+        test-group:
+          [
+            cmd,
+            internal/config,
+            internal/context,
+            internal/env,
+            internal/helper,
+            internal/logger,
+            internal/model,
+            internal/repo,
+            internal/service,
+            internal/transport,
+            migrations,
+            pkg,
+          ]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up go
+        uses: actions/setup-go@v3
+        with:
+          go-version-file: "go.mod"
+          cache: true
+
+      - name: Test
+        run: go test -v ./${{ matrix.test-group }}/...

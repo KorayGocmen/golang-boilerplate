@@ -1,0 +1,51 @@
+version: "3.7"
+
+services:
+  api:
+    image: boilerplate-api:latest
+    container_name: boilerplate-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: serve
+    networks:
+      - boilerplate-api_network
+    ports:
+    - "3000:3000"
+    environment:
+      - ENV=dev
+      - DATABASE_HOST=db
+      - DATABASE_PORT=5432
+      - DATABASE_USER=postgres
+      - DATABASE_PASS=password
+      - DATABASE_DB=boilerplate
+    env_file:
+      - ../.env
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres:14.6-alpine
+    container_name: boilerplate-db
+    ports:
+      - "5432:5432"
+    volumes:
+      - boilerplate-api_volume:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=boilerplate
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+    options: >-
+      --health-cmd pg_isready
+      --health-interval 10s
+      --health-timeout 5s
+      --health-retries 5
+    networks:
+      - boilerplate-api_network
+
+networks:
+  boilerplate-api_network:
+
+volumes:
+  boilerplate-api_volume:

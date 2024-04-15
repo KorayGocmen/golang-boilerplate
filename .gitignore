@@ -1,0 +1,21 @@
+### Project
+# Files
+.DS_Store
+
+# Dirs
+.vscode/
+.idea/
+
+# Configs/Envs
+.env
+.docker.env
+
+# Notes/Logs
+*.log
+*.md
+!README.md
+
+### Golang
+# Binaries
+bin/*
+!bin/.gitkeep
