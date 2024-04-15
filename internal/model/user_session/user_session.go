@@ -17,12 +17,10 @@ type Purpose string
 var (
 	PurposeSessionCreate Purpose = "SESSION_CREATE"
 	PurposePasswordReset Purpose = "PASSWORD_RESET"
-	PurposeImpersonate   Purpose = "IMPERSONATE"
 
 	Purposes = map[Purpose]bool{
 		PurposeSessionCreate: true,
 		PurposePasswordReset: true,
-		// Don't allow impersonation by non-admins.
 	}
 )
 

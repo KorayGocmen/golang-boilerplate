@@ -73,22 +73,4 @@ var (
 			"User ID is missing.",
 		),
 	}
-
-	ErrImpersonate = struct {
-		UserIdMissing errapi.Error
-		UserNotFound  errapi.Error
-	}{
-		UserIdMissing: errapi.New(
-			fiber.StatusBadRequest,
-			errapi.ErrCodeUserIdMissing,
-			"Kullanıcı kimliği eksik.",
-			"User ID is missing.",
-		),
-		UserNotFound: errapi.New(
-			fiber.StatusNotFound,
-			errapi.ErrCodeUserNotFound,
-			"Kullanıcı bulunamadı.",
-			"User not found.",
-		),
-	}
 )
