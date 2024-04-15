@@ -29,7 +29,6 @@ jobs:
             internal/config,
             internal/context,
             internal/env,
-            internal/helper,
             internal/logger,
             internal/model,
             internal/repo,

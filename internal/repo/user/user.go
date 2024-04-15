@@ -110,11 +110,6 @@ func getByID(tx *gorm.DB) GetByIDFn {
 	return func(ctx context.Ctx, id int64) (*User.User, error) {
 		var user User.User
 		err := tx.WithContext(ctx).
-			Preload("Investor").
-			Preload("Address").
-			Preload("PhoneNumberCountry").
-			Preload("Agent").
-			Preload("RealEstateAgent").
 			Where("id = ?", id).
 			First(&user).
 			Error
@@ -136,11 +131,6 @@ func getByEmail(tx *gorm.DB) GetByEmailFn {
 		var user User.User
 		err := tx.WithContext(ctx).
 			Where(`"email" = ?`, email).
-			Preload("Investor").
-			Preload("Address").
-			Preload("PhoneNumberCountry").
-			Preload("Agent").
-			Preload("RealEstateAgent").
 			First(&user).
 			Error
 		if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {

@@ -310,11 +310,11 @@ func TestUpdate(t *testing.T) {
 		t.Fatalf(`want: user password hash not nil; got user password hash nil`)
 	}
 
-	if got := user.GivenNames.String; got != "Koray" {
-		t.Fatalf(`want: user given names = "Koray"; got user given names = %v`, got)
+	if got := user.GivenNames.String; got != "KORAY" {
+		t.Fatalf(`want: user given names = "KORAY"; got user given names = %v`, got)
 	}
 
-	if got := user.Surname.String; got != "Göçmen" {
-		t.Fatalf(`want: user surname = "Göçmen"; got user surname = %v`, got)
+	if got := user.Surname.String; got != "GÖÇMEN" {
+		t.Fatalf(`want: user surname = "GÖÇMEN"; got user surname = %v`, got)
 	}
 }

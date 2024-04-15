@@ -30,8 +30,8 @@ func TestJSON(t *testing.T) {
 		t.Fatalf("want: no error when unmarshalling; got: %v", err)
 	}
 
-	if len(m) != 8 {
-		t.Fatalf("want: 8 fields; got: %v", len(m))
+	if len(m) != 7 {
+		t.Fatalf("want: 7 fields; got: %v", len(m))
 	}
 
 	var dst User

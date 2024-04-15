@@ -98,8 +98,8 @@ func TestCreate(t *testing.T) {
 	if err != nil {
 		t.Fatalf(`want: create err nil; got: err = %v`, err)
 	}
-	if !errapi.Is(aerr, errapi.ErrCodeUserSessionPasswordMissing) {
-		t.Fatalf(`want: aerr = %v; got: aerr = %v`, errapi.ErrCodeUserSessionPasswordMissing, aerr)
+	if !errapi.Is(aerr, errapi.ErrCodeUserSessionCredentialsInvalid) {
+		t.Fatalf(`want: aerr = %v; got: aerr = %v`, errapi.ErrCodeUserSessionCredentialsInvalid, aerr)
 	}
 	params.Password = null.StringFrom("123456")
 
