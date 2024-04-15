@@ -44,15 +44,6 @@ func TestCreate(t *testing.T) {
 		t.Fatalf(`want: aerr = %v; got: aerr = %v`, errapi.ErrCodeUserCreateParamsMissing, aerr)
 	}
 
-	// Test missing email and phone number.
-	_, aerr, err = userService.Create(context.Background(), params)
-	if err != nil {
-		t.Fatalf(`want: create err nil; got: err = %v`, err)
-	}
-	if !errapi.Is(aerr, errapi.ErrCodeUserEmailPhoneNumberMissing) {
-		t.Fatalf(`want: aerr = %v; got: aerr = %v`, errapi.ErrCodeUserEmailPhoneNumberMissing, aerr)
-	}
-
 	// Test invalid email.
 	params.Email = null.StringFrom("invalid")
 	_, aerr, err = userService.Create(context.Background(), params)

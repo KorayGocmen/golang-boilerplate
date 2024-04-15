@@ -76,19 +76,17 @@ func create(tx *repo.Transaction) CreateFn {
 			return nil, aerr, nil
 		}
 
-		if paramsValidated.Email.Valid {
-			userFound, err := tx.User.GetByEmail(ctx, paramsValidated.Email.String)
-			if err != nil {
-				err = fmt.Errorf("user service create error: %w", err)
-				return nil, nil, err
-			}
-
-			if userFound != nil {
-				return nil, ErrCreate.UserEmailExists, nil
-			}
-
-			user.Email = paramsValidated.Email
+		userFound, err := tx.User.GetByEmail(ctx, paramsValidated.Email.String)
+		if err != nil {
+			err = fmt.Errorf("user service create error: %w", err)
+			return nil, nil, err
 		}
+
+		if userFound != nil {
+			return nil, ErrCreate.UserEmailExists, nil
+		}
+
+		user.Email = paramsValidated.Email
 
 		if paramsValidated.Password.Valid {
 			user.Password = paramsValidated.Password

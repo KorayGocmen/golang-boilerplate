@@ -7,21 +7,14 @@ import (
 
 var (
 	ErrCreate = struct {
-		UserCreateParamsMissing     errapi.Error
-		UserEmailPhoneNumberMissing errapi.Error
-		UserEmailExists             errapi.Error
+		UserCreateParamsMissing errapi.Error
+		UserEmailExists         errapi.Error
 	}{
 		UserCreateParamsMissing: errapi.New(
 			fiber.StatusBadRequest,
 			errapi.ErrCodeUserCreateParamsMissing,
 			"Lütfen tüm eksik alanları doldur.",
 			"Please fill in all missing fields.",
-		),
-		UserEmailPhoneNumberMissing: errapi.New(
-			fiber.StatusBadRequest,
-			errapi.ErrCodeUserEmailPhoneNumberMissing,
-			"E-posta adresi ve telefon numarası eksik.",
-			"Email address and phone number are missing.",
 		),
 		UserEmailExists: errapi.New(
 			fiber.StatusConflict,
