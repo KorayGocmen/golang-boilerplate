@@ -5,20 +5,18 @@ import (
 
 	"github.com/koraygocmen/golang-boilerplate/internal/context"
 	"github.com/koraygocmen/golang-boilerplate/internal/errapi"
-	User "github.com/koraygocmen/golang-boilerplate/internal/model/user"
 	UserSession "github.com/koraygocmen/golang-boilerplate/internal/model/user_session"
 	"github.com/koraygocmen/golang-boilerplate/internal/repo"
 	UserService "github.com/koraygocmen/golang-boilerplate/internal/service/user"
-	"github.com/koraygocmen/null"
 )
 
 // Function definitions to make it easier to reference the functions.
 type CreateParams struct {
-	Email          null.String `json:"email"`
-	Password       null.String `json:"password"`
-	Purpose        string      `json:"purpose"`
-	DeliveryMethod string      `json:"deliveryMethod"`
-	ClientIP       string      // internal use only
+	Email          string `json:"email"`
+	Password       string `json:"password"`
+	Purpose        string `json:"purpose"`
+	DeliveryMethod string `json:"deliveryMethod"`
+	ClientIP       string // internal use only
 }
 type CreateFn func(ctx context.Ctx, params *CreateParams) (*UserSession.UserSession, errapi.Error, error)
 type GetFn func(ctx context.Ctx, id int64) (*UserSession.UserSession, errapi.Error, error)
@@ -66,30 +64,18 @@ func create(tx *repo.Transaction, userService *UserService.Service) CreateFn {
 			return nil, ErrCreate.UserSessionPurposeInvalid, nil
 		}
 
-		// Create the user object.
-		var user *User.User
-
-		if email.Valid {
-			var err error
-			user, err = tx.User.GetByEmail(ctx, email.String)
-			if err != nil {
-				err = fmt.Errorf("user session service create error: %w", err)
-				return nil, nil, err
-			}
+		user, err := tx.User.GetByEmail(ctx, email)
+		if err != nil {
+			err = fmt.Errorf("user session service create error: %w", err)
+			return nil, nil, err
 		}
 
 		if user == nil {
 			return nil, ErrCreate.UserSessionCredentialsInvalid, nil
 		}
 
-		// Check the password only if the user does have a password.
-		// Allow users to signup with only a phonenumber/email and verify.
-		if purpose == UserSession.PurposeSessionCreate && user.PasswordHash.Valid {
-			if !password.Valid {
-				return nil, ErrCreate.UserSessionPasswordMissing, nil
-			}
-
-			if !user.PasswordHashCompare(password.String) {
+		if purpose == UserSession.PurposeSessionCreate {
+			if !user.PasswordHashCompare(password) {
 				return nil, ErrCreate.UserSessionCredentialsInvalid, nil
 			}
 		}

@@ -81,7 +81,7 @@ func TestCreate(t *testing.T) {
 	params.Purpose = "session_create"
 
 	// Test email not found.
-	params.Email = null.StringFrom("koray@test.com")
+	params.Email = "koray@test.com"
 	tx.User.GetByEmail = func(ctx context.Ctx, email string) (*User.User, error) {
 		return nil, nil
 	}
@@ -92,6 +92,9 @@ func TestCreate(t *testing.T) {
 	if !errapi.Is(aerr, errapi.ErrCodeUserSessionCredentialsInvalid) {
 		t.Fatalf(`want: aerr = %v; got: aerr = %v`, errapi.ErrCodeUserSessionCredentialsInvalid, aerr)
 	}
+	tx.User.GetByEmail = func(ctx context.Ctx, email string) (*User.User, error) {
+		return user, nil
+	}
 
 	// Test missing password.
 	_, aerr, err = userSessionService.Create(context.Background(), params)
@@ -101,10 +104,10 @@ func TestCreate(t *testing.T) {
 	if !errapi.Is(aerr, errapi.ErrCodeUserSessionCredentialsInvalid) {
 		t.Fatalf(`want: aerr = %v; got: aerr = %v`, errapi.ErrCodeUserSessionCredentialsInvalid, aerr)
 	}
-	params.Password = null.StringFrom("123456")
+	params.Password = "123456"
 
 	// Test password compare (wrong password).
-	params.Password = null.StringFrom("1234567")
+	params.Password = "1234567"
 	_, aerr, err = userSessionService.Create(context.Background(), params)
 	if err != nil {
 		t.Fatalf(`want: create err nil; got: err = %v`, err)
@@ -112,7 +115,7 @@ func TestCreate(t *testing.T) {
 	if !errapi.Is(aerr, errapi.ErrCodeUserSessionCredentialsInvalid) {
 		t.Fatalf(`want: aerr = %v; got: aerr = %v`, errapi.ErrCodeUserSessionCredentialsInvalid, aerr)
 	}
-	params.Password = null.StringFrom("123456")
+	params.Password = "123456"
 
 	// Test password compare (correct password).
 	_, aerr, err = userSessionService.Create(context.Background(), params)
